@@ -1,3 +1,9 @@
+#Your Ansible playbook looks good for replacing the hostname in `.ini` files on a Windows host. Here's a quick breakdown of what each task does:
+#1. **Find .ini files**: The `win_find` module searches for `.ini` files in the `C:\temp` directory and registers the results in `ini_files`.
+#2. **Replace hostname**: The `win_lineinfile` module iterates over the found `.ini` files and replaces lines matching the regex `host\s*=\s*anuj\.singh` with `host = saurabh.kumar.mishra`.
+#If you have any specific questions or need further assistance with this playbook, feel free to ask!
+#####################################################################################################################
+
 ---
 - name: Replace hostname in .ini files
   hosts: windows
