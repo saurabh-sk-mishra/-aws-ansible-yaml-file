@@ -1,0 +1,36 @@
+---
+- name: Create simple .ini files on Windows Server
+  hosts: windows
+  gather_facts: yes
+  tasks:
+    - name: Ensure C:\temp directory exists
+      ansible.windows.win_file:
+        path: C:\temp
+        state: directory
+
+    - name: Create file1.ini with static content
+      ansible.windows.win_copy:
+        dest: C:\temp\file1.ini
+        content: |
+          [database]
+          host = localhost
+          port = 3306
+          user = admin
+          password = secret
+
+    - name: Create file2.ini with static content
+      ansible.windows.win_copy:
+        dest: C:\temp\file2.ini
+        content: |
+          [server]
+          address = 52.91.91.163
+          port = 8080
+
+    - name: Create file3.ini with static content
+      ansible.windows.win_copy:
+        dest: C:\temp\file3.ini
+        content: |
+          [server]
+          address = testing.localhost.com
+          port = 8081
+

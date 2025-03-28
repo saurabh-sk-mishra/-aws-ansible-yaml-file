@@ -1,0 +1,28 @@
+---
+- name: Install AWS SSM Agent on Windows Server
+  hosts: windows
+  gather_facts: yes
+  tasks:
+
+    - name: Ensure the C:\temp directory exists
+      ansible.windows.win_file:
+        path: C:\temp
+        state: directory
+
+    - name: Download the SSM installer package
+      ansible.windows.win_get_url:
+        url: "https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/windows_amd64/AmazonSSMAgentSetup.exe"
+        dest: "C:\\temp\\AmazonSSMAgentSetup.exe"
+
+    - name: Install SSM agent
+      ansible.windows.win_package:
+        path: "C:\\temp\\AmazonSSMAgentSetup.exe"
+        state: present
+        arguments: "/quiet"
+
+    - name: Start the SSM agent service
+      ansible.windows.win_service:
+        name: "AmazonSSMAgent"
+        start_mode: auto
+        state: started
+

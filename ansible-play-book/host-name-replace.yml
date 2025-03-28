@@ -1,0 +1,16 @@
+---
+- name: Replace hostname in .ini files
+  hosts: windows
+  tasks:
+    - name: Find .ini files
+      win_find:
+        paths: C:\temp
+        patterns: '*.ini'
+      register: ini_files
+
+    - name: Replace hostname in .ini files
+      win_lineinfile:
+        path: "{{ item.path }}"
+        regexp: 'host\s*=\s*anuj\.singh'
+        line: 'host = saurabh.kumar.mishra'
+      loop: "{{ ini_files.files }}"

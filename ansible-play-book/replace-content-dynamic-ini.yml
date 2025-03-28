@@ -1,0 +1,43 @@
+---
+- name: Create and Replace Dynamic .ini Files on Windows Server
+  hosts: windows
+  gather_facts: yes
+  vars:
+    # Dynamic variables to create the first content of the .ini file
+    db_host: localhost
+    db_port: 3306
+    db_user: admin
+    db_password: secret
+
+    # Dynamic variables for the new content to replace in the .ini file
+    new_host: anuj.singh.chauhan
+    new_port: 1234
+    new_user: AnujSingh
+    new_password: welcome@123
+
+  tasks:
+    - name: Ensure C:\temp directory exists
+      ansible.windows.win_file:
+        path: C:\temp
+        state: directory
+
+    - name: Create .ini with dynamic content
+      ansible.windows.win_copy:
+        dest: C:\temp\.ini
+        content: |
+          [database]
+          host = {{ db_host }}
+          port = {{ db_port }}
+          user = {{ db_user }}
+          password = {{ db_password }}
+
+    - name: Replace content of file1.ini with new dynamic content
+      ansible.windows.win_copy:
+        dest: C:\temp\.ini
+        content: |
+          [Anujsinghchauhan]
+          host = {{ new_host }}
+          port = {{ new_port }}
+          user = {{ new_user }}
+          password = {{ new_password }}
+

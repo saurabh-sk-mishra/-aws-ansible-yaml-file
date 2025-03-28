@@ -1,0 +1,14 @@
+---
+- name: List .ini file paths in a directory
+  hosts: windows
+  tasks:
+    - name: Find .ini files
+      win_find:
+        paths: C:\temp
+        patterns: '*.ini'
+      register: ini_files
+
+    - name: Display paths of found .ini files
+      debug:
+        msg: "{{ item.path }}"
+      loop: "{{ ini_files.files }}"

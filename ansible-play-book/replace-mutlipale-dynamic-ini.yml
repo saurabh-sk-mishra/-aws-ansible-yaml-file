@@ -1,0 +1,32 @@
+---
+- name: Replace content in multiple .ini files on Windows Server
+  hosts: windows
+  gather_facts: yes
+  vars:
+    # List of .ini files and their new content
+    ini_files:
+      - { file: "C:\\temp\\file1.ini", section: "database", host: "anuj.singh", port: 3306, user: "admin", password: "secret" }
+      - { file: "C:\\temp\\file2.ini", section: "webserver", host: "anuj.singh", port: 8080, user: "webadmin", password: "webpass" }
+      - { file: "C:\\temp\\file3.ini", section: "app", host: "anuj.singh", port: 9090, user: "appuser", password: "apppass" }
+      # Add more files and content here as needed up to 100 files
+      - { file: "C:\\temp\\file4.ini", section: "server", host: "anuj.singh", port: 2000, user: "sysadmin", password: "password123" }
+      - { file: "C:\\temp\\file5.ini", section: "monitoring", host: "anuj.singh", port: 9000, user: "monitor", password: "monitorpass" }
+      # You can dynamically create this list or store it externally (for example, in a separate vars file)
+
+  tasks:
+    - name: Ensure C:\temp directory exists
+      ansible.windows.win_file:
+        path: C:\temp
+        state: directory
+
+    - name: Replace content in multiple .ini files
+      ansible.windows.win_copy:
+        dest: "{{ item.file }}"
+        content: |
+          [{{ item.section }}]
+          host = {{ item.host }}
+          port = {{ item.port }}
+          user = {{ item.user }}
+          password = {{ item.password }}
+      loop: "{{ ini_files }}"
+
